@@ -4,15 +4,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class MenuState extends State {
+public class PlayState extends State {
+
+    public static final float WORLD_WIDTH = 10000;
+    public static final float WORLD_HEIGHT = 10000;
+    public static final float VIEW_WORLD_PERCENTAGE = 0.1f;
 
     private Texture bg;
 
-    public MenuState(GameStateManager gsm) {
+    public PlayState(GameStateManager gsm) {
         super(gsm);
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
-        cam.setToOrtho(false, w, h);
+        // Height is multiplied by aspect ratio
+        cam.setToOrtho(false, WORLD_WIDTH * VIEW_WORLD_PERCENTAGE, WORLD_HEIGHT * VIEW_WORLD_PERCENTAGE * (h / w));
         cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0);
         cam.update();
 

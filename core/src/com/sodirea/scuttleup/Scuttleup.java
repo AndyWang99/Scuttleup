@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sodirea.scuttleup.states.GameStateManager;
 import com.sodirea.scuttleup.states.MenuState;
+import com.sodirea.scuttleup.states.PlayState;
 
 public class Scuttleup extends ApplicationAdapter {
 	private SpriteBatch sb;
@@ -17,7 +18,7 @@ public class Scuttleup extends ApplicationAdapter {
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		sb = new SpriteBatch();
 		gsm = new GameStateManager();
-		gsm.push(new MenuState(gsm));
+		gsm.push(new PlayState(gsm));
 
 	}
 
