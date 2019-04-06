@@ -7,9 +7,14 @@ import com.sodirea.scuttleup.Scuttleup;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
-		Graphics.DisplayMode displayMode = LwjglApplicationConfiguration.getDesktopDisplayMode();
+//		Graphics.DisplayMode displayMode = LwjglApplicationConfiguration.getDesktopDisplayMode();
+//		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+//		config.setFromDisplayMode(displayMode);
+//		new LwjglApplication(new Scuttleup(), config);
+
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.setFromDisplayMode(displayMode);
+		config.width = LwjglApplicationConfiguration.getDesktopDisplayMode().width;
+		config.height = LwjglApplicationConfiguration.getDesktopDisplayMode().height;
 		new LwjglApplication(new Scuttleup(), config);
 	}
 }
