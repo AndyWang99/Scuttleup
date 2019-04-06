@@ -28,9 +28,13 @@ public class PlayScreen extends ScreenAdapter {
             public boolean keyDown(int keyCode) {
                 if (keyCode == Input.Keys.SHIFT_LEFT || keyCode == Input.Keys.SPACE) {
 
-                } else if (keyCode == Input.Keys.W || keyCode == Input.Keys.DPAD_UP) { // go up on menu
+                } else if (keyCode == Input.Keys.W || keyCode == Input.Keys.DPAD_UP) {
+
+                } else if (keyCode == Input.Keys.A || keyCode == Input.Keys.DPAD_LEFT) {
 
                 } else if (keyCode == Input.Keys.S || keyCode == Input.Keys.DPAD_DOWN) {
+
+                } else if (keyCode == Input.Keys.D || keyCode == Input.Keys.DPAD_RIGHT) {
 
                 }
                 return true;
