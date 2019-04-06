@@ -1,37 +1,44 @@
 package com.sodirea.scuttleup;
 
-import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.sodirea.scuttleup.states.GameStateManager;
-import com.sodirea.scuttleup.states.MenuState;
-import com.sodirea.scuttleup.states.PlayState;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.sodirea.scuttleup.screens.MenuScreen;
 
-public class Scuttleup extends ApplicationAdapter {
-	private SpriteBatch sb;
-	private GameStateManager gsm;
-	
+public class Scuttleup extends Game {
+
+	public SpriteBatch sb;
+	public BitmapFont font;
+	public OrthographicCamera cam;
+	private Viewport viewport;
+
 	@Override
 	public void create () {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
+		Gdx.gl.glClearColor(0, 0, 0, 1);
 		sb = new SpriteBatch();
-		gsm = new GameStateManager();
-		gsm.push(new PlayState(gsm));
+		font = new BitmapFont();
 
+		cam = new OrthographicCamera();
+		cam.setToOrtho(false, 1280, 800);
+		viewport = new FitViewport(1280, 800, cam);
+
+		setScreen(new MenuScreen(this));
 	}
 
 	@Override
-	public void render () {
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		gsm.update(Gdx.graphics.getDeltaTime());
-		gsm.render(sb);
+	public void resize(int width, int height) {
+		viewport.update(width, height);
+		cam.update();
 	}
 	
 	@Override
 	public void dispose () {
 		sb.dispose();
-
+		font.dispose();
 	}
 }
