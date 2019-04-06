@@ -33,8 +33,14 @@ public class MenuScreen extends ScreenAdapter {
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean keyDown(int keyCode) {
-                if (keyCode == Input.Keys.SPACE) {
-//                    game.setScreen(new GameScreen(game));
+                if (keyCode == Input.Keys.SHIFT_LEFT || keyCode == Input.Keys.SPACE) {
+                    if (menuIndex == 0) {
+                        game.setScreen(new PlayScreen(game));
+                    } else if (menuIndex == 1) {
+
+                    } else if (menuIndex == 2) {
+                        System.exit(0);
+                    }
                 } else if (menuIndex > 0 && (keyCode == Input.Keys.W || keyCode == Input.Keys.DPAD_UP)) { // go up on menu
                     menuIndex--;
                 } else if (menuIndex < menuItems.size()-1 && (keyCode == Input.Keys.S || keyCode == Input.Keys.DPAD_DOWN)) {
