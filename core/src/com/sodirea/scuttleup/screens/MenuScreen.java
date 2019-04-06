@@ -41,6 +41,8 @@ public class MenuScreen extends ScreenAdapter {
 
         game.sb.begin();
         game.sb.draw(bg, 0, 0);
+        game.font.draw(game.sb, "Play", Gdx.graphics.getWidth() * .25f, Gdx.graphics.getHeight() * .75f);
+        game.font.draw(game.sb, "PVP", Gdx.graphics.getWidth() * .25f, Gdx.graphics.getHeight() * .5f);
         game.sb.end();
     }
 
