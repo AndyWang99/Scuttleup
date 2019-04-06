@@ -1,4 +1,4 @@
-package com.sodirea.yikes.states;
+package com.sodirea.scuttleup.states;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
