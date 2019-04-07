@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.sodirea.scuttleup.Scuttleup;
+import com.sodirea.scuttleup.sprites.Checkpoint;
 
 import java.util.ArrayList;
 
@@ -19,10 +20,12 @@ public class PlayScreen extends ScreenAdapter {
     public static final int GRAVITY = -500;
     public static final float TIME_STEP = 1 / 300f;
     public static final boolean DEBUGGING = false; // don't forget to set PIXELS_TO_METERS to 1f for this to be useful (i.e. see real-sized physics bodies)
-
+    
     Scuttleup game;
 
     private Texture bg;
+
+    private Checkpoint checkpoint; // this will just move up by CHECKPOINT_INTERVALS after it goes out of screen.
 
     private World world;
     private Box2DDebugRenderer debugRenderer;
@@ -30,6 +33,8 @@ public class PlayScreen extends ScreenAdapter {
     public PlayScreen(Scuttleup game) {
         this.game = game;
         bg = new Texture("catbg.png");
+
+        checkpoint = new Checkpoint(0, 0);
 
         world = new World(new Vector2(0, GRAVITY), true);
         debugRenderer = new Box2DDebugRenderer();
@@ -59,6 +64,8 @@ public class PlayScreen extends ScreenAdapter {
     @Override
     public void render(float delta) {
         // LOGIC UPDATES
+        checkpoint.update(game.cam.position.y - game.cam.viewportHeight / 2);
+
         game.cam.update();
 
         world.step(TIME_STEP, 6, 2);
@@ -76,6 +83,7 @@ public class PlayScreen extends ScreenAdapter {
             debugRenderer.render(world, game.cam.combined);
         }
         game.sb.draw(bg, 0, 0);
+        checkpoint.render(game.sb);
         game.sb.end();
     }
 
@@ -87,5 +95,6 @@ public class PlayScreen extends ScreenAdapter {
     @Override
     public void dispose() {
         bg.dispose();
+        checkpoint.dispose();
     }
 }
