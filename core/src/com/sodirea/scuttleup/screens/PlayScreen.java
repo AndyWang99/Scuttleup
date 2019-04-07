@@ -16,11 +16,11 @@ import java.util.ArrayList;
 
 public class PlayScreen extends ScreenAdapter {
 
-    public static final float PIXELS_TO_METERS = 0.01f; // default is 0.01f
+    public static final float PIXELS_TO_METERS = 1f; // default is 0.01f
     public static final int GRAVITY = -500;
     public static final float TIME_STEP = 1 / 300f;
-    public static final boolean DEBUGGING = false; // don't forget to set PIXELS_TO_METERS to 1f for this to be useful (i.e. see real-sized physics bodies)
-    
+    public static final boolean DEBUGGING = true; // don't forget to set PIXELS_TO_METERS to 1f for this to be useful (i.e. see real-sized physics bodies)
+
     Scuttleup game;
 
     private Texture bg;
@@ -34,10 +34,11 @@ public class PlayScreen extends ScreenAdapter {
         this.game = game;
         bg = new Texture("catbg.png");
 
-        checkpoint = new Checkpoint(0, 0);
-
         world = new World(new Vector2(0, GRAVITY), true);
         debugRenderer = new Box2DDebugRenderer();
+
+        checkpoint = new Checkpoint(0, world);
+
     }
 
     @Override
@@ -79,12 +80,12 @@ public class PlayScreen extends ScreenAdapter {
         game.sb.setProjectionMatrix(game.cam.projection);
 
         game.sb.begin();
-        if (DEBUGGING) {
-            debugRenderer.render(world, game.cam.combined);
-        }
         game.sb.draw(bg, 0, 0);
         checkpoint.render(game.sb);
         game.sb.end();
+        if (DEBUGGING) {
+            debugRenderer.render(world, game.cam.combined);
+        }
     }
 
     @Override
