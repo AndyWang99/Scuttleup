@@ -8,11 +8,10 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
+import static com.sodirea.scuttleup.screens.PlayScreen.CHECKPOINT_INTERVALS;
 import static com.sodirea.scuttleup.screens.PlayScreen.PIXELS_TO_METERS;
 
 public class Checkpoint {
-
-    public static final int CHECKPOINT_INTERVALS = 2000; // each checkpoint should give a new upgrade for character
 
     private Texture tile;
     private Vector2 position;

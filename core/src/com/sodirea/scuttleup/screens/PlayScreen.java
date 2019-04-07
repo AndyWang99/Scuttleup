@@ -10,7 +10,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.sodirea.scuttleup.Scuttleup;
+import com.sodirea.scuttleup.sprites.BasicPlatform;
 import com.sodirea.scuttleup.sprites.Checkpoint;
+import com.sodirea.scuttleup.sprites.Platform;
 
 import java.util.ArrayList;
 
@@ -21,11 +23,16 @@ public class PlayScreen extends ScreenAdapter {
     public static final float TIME_STEP = 1 / 300f;
     public static final boolean DEBUGGING = true; // don't forget to set PIXELS_TO_METERS to 1f for this to be useful (i.e. see real-sized physics bodies)
 
+    public static final int CHECKPOINT_INTERVALS = 2000; // each checkpoint should give a new upgrade for character
+    public static final int PLATFORM_INTERVALS = 200;
+    public static final int NUM_PLATFORMS_IN_ARRAY = (int) Math.ceil(Scuttleup.SCREEN_HEIGHT / PLATFORM_INTERVALS) + 1;
+
     Scuttleup game;
 
     private Texture bg;
 
     private Checkpoint checkpoint; // this will just move up by CHECKPOINT_INTERVALS after it goes out of screen.
+    private ArrayList<Platform> platforms;
 
     private World world;
     private Box2DDebugRenderer debugRenderer;
@@ -38,7 +45,10 @@ public class PlayScreen extends ScreenAdapter {
         debugRenderer = new Box2DDebugRenderer();
 
         checkpoint = new Checkpoint(0, world);
-
+        platforms = new ArrayList<Platform>();
+        for (int i = 1; i <= NUM_PLATFORMS_IN_ARRAY; i++) {
+            platforms.add(new BasicPlatform(i * PLATFORM_INTERVALS, world));
+        }
     }
 
     @Override
@@ -66,6 +76,9 @@ public class PlayScreen extends ScreenAdapter {
     public void render(float delta) {
         // LOGIC UPDATES
         checkpoint.update(game.cam.position.y - game.cam.viewportHeight / 2);
+        for (Platform platform : platforms) {
+            platform.update();
+        }
 
         game.cam.update();
 
@@ -82,6 +95,9 @@ public class PlayScreen extends ScreenAdapter {
         game.sb.begin();
         game.sb.draw(bg, 0, 0);
         checkpoint.render(game.sb);
+        for (Platform platform : platforms) {
+            platform.render(game.sb);
+        }
         game.sb.end();
         if (DEBUGGING) {
             debugRenderer.render(world, game.cam.combined);
@@ -97,5 +113,8 @@ public class PlayScreen extends ScreenAdapter {
     public void dispose() {
         bg.dispose();
         checkpoint.dispose();
+        for (Platform platform : platforms) {
+            platform.dispose();
+        }
     }
 }
