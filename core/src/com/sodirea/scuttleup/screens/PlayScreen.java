@@ -8,6 +8,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.sodirea.scuttleup.Scuttleup;
 import com.sodirea.scuttleup.sprites.BasicPlatform;
@@ -19,7 +23,7 @@ import java.util.ArrayList;
 
 public class PlayScreen extends ScreenAdapter {
 
-    public static final float PIXELS_TO_METERS = 1f; // default is 0.01f
+    public static final float PIXELS_TO_METERS = 0.01f; // default is 0.01f
     public static final int GRAVITY = -500;
     public static final float TIME_STEP = 1 / 300f;
     public static final boolean DEBUGGING = true; // don't forget to set PIXELS_TO_METERS to 1f for this to be useful (i.e. see real-sized physics bodies)
@@ -35,6 +39,7 @@ public class PlayScreen extends ScreenAdapter {
     private Checkpoint checkpoint; // this will just move up by CHECKPOINT_INTERVALS after it goes out of screen.
     private ArrayList<Platform> platforms;
     private Player player;
+    private float moveCamUpToHere;
 
     private World world;
     private Box2DDebugRenderer debugRenderer;
@@ -44,6 +49,39 @@ public class PlayScreen extends ScreenAdapter {
         bg = new Texture("catbg.png");
 
         world = new World(new Vector2(0, GRAVITY), true);
+        world.setContactListener(new ContactListener() {
+            @Override
+            public void beginContact(Contact contact) {
+                if (contact.getFixtureA().getBody().getUserData() instanceof Player || contact.getFixtureB().getBody().getUserData() instanceof Player) {
+                    Platform platform = null;
+                    if (contact.getFixtureA().getBody().getUserData() instanceof Platform) {
+                        platform = (Platform) contact.getFixtureA().getBody().getUserData();
+                    } else if (contact.getFixtureB().getBody().getUserData() instanceof Platform) {
+                        platform = (Platform) contact.getFixtureB().getBody().getUserData();
+                    }
+
+                    if (platform != null && player.getPosition().y > platform.getPosition().y + platform.getTexture().getHeight()) {
+                        moveCamUpToHere += PLATFORM_INTERVALS;
+                    }
+                }
+            }
+
+            @Override
+            public void endContact(Contact contact) {
+
+            }
+
+            @Override
+            public void preSolve(Contact contact, Manifold oldManifold) {
+
+            }
+
+            @Override
+            public void postSolve(Contact contact, ContactImpulse impulse) {
+
+            }
+        });
+
         debugRenderer = new Box2DDebugRenderer();
 
         checkpoint = new Checkpoint(0, world);
@@ -52,6 +90,7 @@ public class PlayScreen extends ScreenAdapter {
             platforms.add(new BasicPlatform(i * PLATFORM_INTERVALS, world));
         }
         player = new Player(game.cam.position.x, checkpoint.getTexture().getHeight(), world);
+        moveCamUpToHere = game.cam.position.y;
     }
 
     @Override
@@ -108,6 +147,9 @@ public class PlayScreen extends ScreenAdapter {
         }
         player.update();
 
+        if (game.cam.position.y < moveCamUpToHere) {
+            game.cam.position.y += (moveCamUpToHere-game.cam.position.y) / 10;
+        }
         game.cam.update();
 
         world.step(TIME_STEP, 6, 2);

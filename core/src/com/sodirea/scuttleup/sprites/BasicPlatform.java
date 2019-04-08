@@ -49,4 +49,12 @@ public class BasicPlatform extends Platform {
         tile.dispose();
         platformBox.dispose();
     }
+
+    public Vector2 getPosition() {
+        return position;
+    }
+
+    public Texture getTexture() {
+        return tile;
+    }
 }

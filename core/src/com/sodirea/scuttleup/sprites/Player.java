@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
 import static com.sodirea.scuttleup.screens.PlayScreen.PIXELS_TO_METERS;
@@ -22,6 +23,12 @@ public class Player {
     private CircleShape playerCircle;
     private FixtureDef playerFixtureDef;
     private Fixture playerFixture;
+
+    private BodyDef footBodyDef;
+    private Body footBody;
+    private PolygonShape footBox;
+    private FixtureDef footFixtureDef;
+    private Fixture footFixture;
 
     public Player(float x, float y, World world) {
         sprite = new Texture("player.png");
@@ -38,11 +45,25 @@ public class Player {
         playerFixtureDef.density = 500f;
         playerFixtureDef.friction = 0f;
         playerFixture = playerBody.createFixture(playerFixtureDef);
-        playerBody.setUserData(this);
+
+        footBodyDef = new BodyDef();
+        footBodyDef.type = BodyDef.BodyType.DynamicBody;
+        footBodyDef.position.set(playerBody.getPosition().x, playerBody.getPosition().y - playerCircle.getRadius() - playerCircle.getRadius() / 8 -  2*PIXELS_TO_METERS);
+        footBody = world.createBody(footBodyDef);
+        footBox = new PolygonShape();
+        footBox.setAsBox(playerCircle.getRadius() / 4, playerCircle.getRadius() / 8);
+        footFixtureDef = new FixtureDef();
+        footFixtureDef.shape = footBox;
+        footFixtureDef.density = 0;
+        footFixtureDef.isSensor = true;
+        footFixture = footBody.createFixture(footFixtureDef);
+        footBody.setFixedRotation(true);
+        footBody.setUserData(this);
     }
 
     public void update() {
         position.set(playerBody.getPosition().x/PIXELS_TO_METERS-sprite.getWidth()/2, playerBody.getPosition().y/PIXELS_TO_METERS-sprite.getWidth()/2); // convert physics body coordinates back to render coordinates. this ensures that the rendering position is always in sync with the physics body's position
+        footBody.setTransform(new Vector2(playerBody.getPosition().x, playerBody.getPosition().y - playerCircle.getRadius() - playerCircle.getRadius()/8 - 2*PIXELS_TO_METERS), 0); // update the foot sensor body's position to constantly be under the ball's body
     }
 
     public void render(SpriteBatch sb) {
@@ -60,5 +81,9 @@ public class Player {
 
     public void setBodyLinearVelocity(float x, float y) {
         playerBody.setLinearVelocity(x, y);
+    }
+
+    public Vector2 getPosition() {
+        return position;
     }
 }
