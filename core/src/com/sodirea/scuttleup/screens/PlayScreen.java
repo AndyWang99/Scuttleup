@@ -13,6 +13,7 @@ import com.sodirea.scuttleup.Scuttleup;
 import com.sodirea.scuttleup.sprites.BasicPlatform;
 import com.sodirea.scuttleup.sprites.Checkpoint;
 import com.sodirea.scuttleup.sprites.Platform;
+import com.sodirea.scuttleup.sprites.Player;
 
 import java.util.ArrayList;
 
@@ -33,6 +34,7 @@ public class PlayScreen extends ScreenAdapter {
 
     private Checkpoint checkpoint; // this will just move up by CHECKPOINT_INTERVALS after it goes out of screen.
     private ArrayList<Platform> platforms;
+    private Player player;
 
     private World world;
     private Box2DDebugRenderer debugRenderer;
@@ -49,6 +51,7 @@ public class PlayScreen extends ScreenAdapter {
         for (int i = 1; i <= NUM_PLATFORMS_IN_ARRAY; i++) {
             platforms.add(new BasicPlatform(i * PLATFORM_INTERVALS, world));
         }
+        player = new Player(game.cam.position.x, checkpoint.getTexture().getHeight(), world);
     }
 
     @Override
@@ -56,15 +59,39 @@ public class PlayScreen extends ScreenAdapter {
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean keyDown(int keyCode) {
-                if (keyCode == Input.Keys.SHIFT_LEFT || keyCode == Input.Keys.SPACE) {
+                if (keyCode == Input.Keys.W || keyCode == Input.Keys.SPACE) {
+                    player.setBodyLinearVelocity(player.getBodyLinearVelocity().x, 50);
+                } else if (keyCode == Input.Keys.A) {
+                    player.setBodyLinearVelocity(-20, player.getBodyLinearVelocity().y);
+                } else if (keyCode == Input.Keys.S) {
 
-                } else if (keyCode == Input.Keys.W || keyCode == Input.Keys.DPAD_UP) {
+                } else if (keyCode == Input.Keys.D) {
+                    player.setBodyLinearVelocity(20, player.getBodyLinearVelocity().y);
+                } else if (keyCode == Input.Keys.J) {
 
-                } else if (keyCode == Input.Keys.A || keyCode == Input.Keys.DPAD_LEFT) {
+                } else if (keyCode == Input.Keys.K) {
 
-                } else if (keyCode == Input.Keys.S || keyCode == Input.Keys.DPAD_DOWN) {
+                } else if (keyCode == Input.Keys.L) {
 
-                } else if (keyCode == Input.Keys.D || keyCode == Input.Keys.DPAD_RIGHT) {
+                }
+                return true;
+            }
+
+            @Override
+            public boolean keyUp(int keyCode) {
+                if (keyCode == Input.Keys.W) {
+
+                } else if (keyCode == Input.Keys.A) {
+                    player.setBodyLinearVelocity(0, 0);
+                } else if (keyCode == Input.Keys.S) {
+
+                } else if (keyCode == Input.Keys.D) {
+                    player.setBodyLinearVelocity(0, 0);
+                } else if (keyCode == Input.Keys.J) {
+
+                } else if (keyCode == Input.Keys.K) {
+
+                } else if (keyCode == Input.Keys.L) {
 
                 }
                 return true;
@@ -79,6 +106,7 @@ public class PlayScreen extends ScreenAdapter {
         for (Platform platform : platforms) {
             platform.update();
         }
+        player.update();
 
         game.cam.update();
 
@@ -98,6 +126,7 @@ public class PlayScreen extends ScreenAdapter {
         for (Platform platform : platforms) {
             platform.render(game.sb);
         }
+        player.render(game.sb);
         game.sb.end();
         if (DEBUGGING) {
             debugRenderer.render(world, game.cam.combined);
@@ -116,5 +145,6 @@ public class PlayScreen extends ScreenAdapter {
         for (Platform platform : platforms) {
             platform.dispose();
         }
+        player.dispose();
     }
 }

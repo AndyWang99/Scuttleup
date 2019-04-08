@@ -30,6 +30,7 @@ public class Checkpoint {
         checkpointBox = new PolygonShape();
         checkpointBox.setAsBox(tile.getWidth() / 2 * PIXELS_TO_METERS, tile.getHeight() / 2 * PIXELS_TO_METERS);
         checkpointBody.createFixture(checkpointBox, 0.0f);
+
         checkpointBody.setUserData(this);
     }
 
@@ -44,5 +45,9 @@ public class Checkpoint {
     public void dispose() {
         tile.dispose();
         checkpointBox.dispose();
+    }
+
+    public Texture getTexture() {
+        return tile;
     }
 }
