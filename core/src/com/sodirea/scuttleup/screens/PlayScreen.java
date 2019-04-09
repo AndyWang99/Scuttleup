@@ -125,18 +125,22 @@ public class PlayScreen extends ScreenAdapter {
         if (Gdx.input.isKeyJustPressed(Input.Keys.J)) {
             if (Gdx.input.isKeyPressed(Input.Keys.W)) {
                 player.applyBodyLinearImpulse(0, 100);
+                player.setDashingStatus();
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.A)) {
                 player.applyBodyLinearImpulse(-40, 0);
+                player.setDashingStatus();
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.S)) {
                 player.applyBodyLinearImpulse(0, -100);
+                player.setDashingStatus();
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.D)) {
                 player.applyBodyLinearImpulse(40, 0);
+                player.setDashingStatus();
             }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.K)) {
@@ -162,7 +166,7 @@ public class PlayScreen extends ScreenAdapter {
             platform.update();
         }
 
-        player.update();
+        player.update(delta);
 
         game.cam.position.y += (moveCamUpToHere-game.cam.position.y) / 10;
 

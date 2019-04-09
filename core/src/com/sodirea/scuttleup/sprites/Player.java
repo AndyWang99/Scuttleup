@@ -15,8 +15,13 @@ import static com.sodirea.scuttleup.screens.PlayScreen.PIXELS_TO_METERS;
 
 public class Player {
 
+    private static final float DASH_DURATION = 0.5f;
+
     private Texture sprite;
     private Vector2 position;
+
+    private boolean isDashing;
+    private float dashCounter;
 
     private BodyDef playerBodyDef;
     private Body playerBody;
@@ -34,6 +39,8 @@ public class Player {
     public Player(float x, float y, World world) {
         sprite = new Texture("player.png");
         position = new Vector2(x, y);
+
+        dashCounter = 0;
 
         playerBodyDef = new BodyDef();
         playerBodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -61,17 +68,36 @@ public class Player {
         numberOfFootContacts = 0;
     }
 
-    public void update() {
-        if (playerBody.getLinearVelocity().x < -20) {
-            playerBody.setLinearVelocity(-20, playerBody.getLinearVelocity().y);
-        }
+    public void update(float dt) {
+        if (isDashing) {
+            if (playerBody.getLinearVelocity().x < -40) {
+                playerBody.setLinearVelocity(-40, playerBody.getLinearVelocity().y);
+            }
 
-        if (playerBody.getLinearVelocity().x > 20) {
-            playerBody.setLinearVelocity(20, playerBody.getLinearVelocity().y);
-        }
+            if (playerBody.getLinearVelocity().x > 40) {
+                playerBody.setLinearVelocity(40, playerBody.getLinearVelocity().y);
+            }
 
-        if (playerBody.getLinearVelocity().y > 50) {
-            playerBody.setLinearVelocity(playerBody.getLinearVelocity().x, 50);
+            if (playerBody.getLinearVelocity().y > 70) {
+                playerBody.setLinearVelocity(playerBody.getLinearVelocity().x, 70);
+            }
+            dashCounter += dt;
+            if (dashCounter > DASH_DURATION) {
+                dashCounter = 0;
+                isDashing = false;
+            }
+        } else {
+            if (playerBody.getLinearVelocity().x < -20) {
+                playerBody.setLinearVelocity(-20, playerBody.getLinearVelocity().y);
+            }
+
+            if (playerBody.getLinearVelocity().x > 20) {
+                playerBody.setLinearVelocity(20, playerBody.getLinearVelocity().y);
+            }
+
+            if (playerBody.getLinearVelocity().y > 50) {
+                playerBody.setLinearVelocity(playerBody.getLinearVelocity().x, 50);
+            }
         }
 
         position.set(playerBody.getPosition().x/PIXELS_TO_METERS-sprite.getWidth()/2, playerBody.getPosition().y/PIXELS_TO_METERS-sprite.getWidth()/2); // convert physics body coordinates back to render coordinates. this ensures that the rendering position is always in sync with the physics body's position
@@ -105,5 +131,9 @@ public class Player {
 
     public int getNumberOfFootContacts() {
         return numberOfFootContacts;
+    }
+
+    public void setDashingStatus() {
+        isDashing = true;
     }
 }
