@@ -16,10 +16,14 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.sodirea.scuttleup.Scuttleup;
 import com.sodirea.scuttleup.sprites.BasicPlatform;
 import com.sodirea.scuttleup.sprites.Checkpoint;
+import com.sodirea.scuttleup.sprites.PistonPlatform;
 import com.sodirea.scuttleup.sprites.Platform;
 import com.sodirea.scuttleup.sprites.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 import static com.sodirea.scuttleup.Scuttleup.SCREEN_HEIGHT;
 
@@ -41,8 +45,10 @@ public class PlayScreen extends ScreenAdapter {
     private Checkpoint checkpoint; // this will just move up by CHECKPOINT_INTERVALS after it goes out of screen.
     private ArrayList<Platform> platforms;
     private float highestPlatform;
+    private Map<Double, String> platformChances;
     private Player player;
     private float moveCamUpToHere;
+    private Random randomPlatformGen;
 
     private World world;
     private Box2DDebugRenderer debugRenderer;
@@ -92,10 +98,29 @@ public class PlayScreen extends ScreenAdapter {
 
         checkpoint = new Checkpoint(0, world);
         highestPlatform = 0;
+        platformChances = new HashMap<Double, String>();
+        platformChances.put(0.7, "basic");
+        platformChances.put(1.0, "piston");
+        randomPlatformGen = new Random();
+
         platforms = new ArrayList<Platform>();
+
         for (int i = 0; i < NUM_PLATFORMS_IN_ARRAY; i++) {
             highestPlatform += PLATFORM_INTERVALS;
-            platforms.add(new BasicPlatform(highestPlatform, world));
+            double randomPlatform = randomPlatformGen.nextDouble();
+            // TODO:: binary search to find where the random platform is in
+            for (Map.Entry<Double, String> entry : platformChances.entrySet()) {
+                if (randomPlatform < entry.getKey())
+                {
+                    if (entry.getValue().equals("basic")) {
+                        platforms.add(new BasicPlatform(highestPlatform, world));
+                        break;
+                    } else if (entry.getValue().equals("piston")) {
+                        platforms.add(new PistonPlatform(highestPlatform, world));
+                        break;
+                    }
+                }
+            }
         }
         player = new Player(game.cam.position.x, checkpoint.getTexture().getHeight(), world);
         moveCamUpToHere = game.cam.position.y;
@@ -112,9 +137,22 @@ public class PlayScreen extends ScreenAdapter {
         checkpoint.update(game.cam.position.y - game.cam.viewportHeight / 2);
         for (int i = 0; i < NUM_PLATFORMS_IN_ARRAY; i++) {
             Platform platform = platforms.get(i);
-            if (platform.getPosition().y < game.cam.position.y - game.cam.viewportHeight / 2) {
+            if (platform.getPosition().y + platform.getTexture().getHeight() < game.cam.position.y - game.cam.viewportHeight / 2) {
                 highestPlatform += PLATFORM_INTERVALS;
-                platforms.set(i, new BasicPlatform(highestPlatform, world));
+                double randomPlatform = randomPlatformGen.nextDouble();
+                // TODO:: binary search to find where the random platform is in
+                for (Map.Entry<Double, String> entry : platformChances.entrySet()) {
+                    if (randomPlatform < entry.getKey())
+                    {
+                        if (entry.getValue().equals("basic")) {
+                            platforms.set(i, new BasicPlatform(highestPlatform, world));
+                            break;
+                        } else if (entry.getValue().equals("piston")) {
+                            platforms.set(i, new PistonPlatform(highestPlatform, world));
+                            break;
+                        }
+                    }
+                }
             }
             platform.update();
         }

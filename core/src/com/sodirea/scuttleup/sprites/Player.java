@@ -121,9 +121,6 @@ public class Player {
         if (Gdx.input.isKeyPressed(Input.Keys.K)) {
 
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.L)) {
-
-        }
     }
 
     public void update(float dt) {
