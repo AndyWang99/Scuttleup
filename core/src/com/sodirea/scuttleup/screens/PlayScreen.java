@@ -123,24 +123,32 @@ public class PlayScreen extends ScreenAdapter {
             player.applyBodyLinearImpulse(5, 0);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.J)) {
+            player.setBodyLinearVelocity(0, 0);
+            
             if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-                player.applyBodyLinearImpulse(0, 100);
+                player.setBodyLinearVelocity(player.getBodyLinearVelocity().x, 70);
                 player.setDashingStatus();
+
+
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                player.applyBodyLinearImpulse(-40, 0);
+                player.setBodyLinearVelocity(-40, player.getBodyLinearVelocity().y);
                 player.setDashingStatus();
+
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                player.applyBodyLinearImpulse(0, -100);
+                player.setBodyLinearVelocity(player.getBodyLinearVelocity().x, -70);
                 player.setDashingStatus();
+
+
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                player.applyBodyLinearImpulse(40, 0);
+                player.setBodyLinearVelocity(40, player.getBodyLinearVelocity().y);
                 player.setDashingStatus();
+
             }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.K)) {

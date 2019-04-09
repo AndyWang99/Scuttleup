@@ -70,6 +70,8 @@ public class Player {
 
     public void update(float dt) {
         if (isDashing) {
+            // since dashing, don't let gravity affect
+            playerBody.setGravityScale(0f);
             if (playerBody.getLinearVelocity().x < -40) {
                 playerBody.setLinearVelocity(-40, playerBody.getLinearVelocity().y);
             }
@@ -84,6 +86,7 @@ public class Player {
             dashCounter += dt;
             if (dashCounter > DASH_DURATION) {
                 dashCounter = 0;
+                playerBody.setGravityScale(1f);
                 isDashing = false;
             }
         } else {
@@ -135,5 +138,13 @@ public class Player {
 
     public void setDashingStatus() {
         isDashing = true;
+    }
+
+    public Vector2 getBodyLinearVelocity() {
+        return playerBody.getLinearVelocity();
+    }
+
+    public void setBodyLinearVelocity(float x, float y) {
+        playerBody.setLinearVelocity(x, y);
     }
 }
