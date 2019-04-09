@@ -38,6 +38,7 @@ public class PlayScreen extends ScreenAdapter {
 
     private Checkpoint checkpoint; // this will just move up by CHECKPOINT_INTERVALS after it goes out of screen.
     private ArrayList<Platform> platforms;
+    private float highestPlatform;
     private Player player;
     private float moveCamUpToHere;
 
@@ -85,9 +86,11 @@ public class PlayScreen extends ScreenAdapter {
         debugRenderer = new Box2DDebugRenderer();
 
         checkpoint = new Checkpoint(0, world);
+        highestPlatform = 0;
         platforms = new ArrayList<Platform>();
-        for (int i = 1; i <= NUM_PLATFORMS_IN_ARRAY; i++) {
-            platforms.add(new BasicPlatform(i * PLATFORM_INTERVALS, world));
+        for (int i = 0; i < NUM_PLATFORMS_IN_ARRAY; i++) {
+            highestPlatform += PLATFORM_INTERVALS;
+            platforms.add(new BasicPlatform(highestPlatform, world));
         }
         player = new Player(game.cam.position.x, checkpoint.getTexture().getHeight(), world);
         moveCamUpToHere = game.cam.position.y;
@@ -142,9 +145,15 @@ public class PlayScreen extends ScreenAdapter {
     public void render(float delta) {
         // LOGIC UPDATES
         checkpoint.update(game.cam.position.y - game.cam.viewportHeight / 2);
-        for (Platform platform : platforms) {
+        for (int i = 0; i < NUM_PLATFORMS_IN_ARRAY; i++) {
+            Platform platform = platforms.get(i);
+            if (platform.getPosition().y < game.cam.position.y - game.cam.viewportHeight / 2) {
+                highestPlatform += PLATFORM_INTERVALS;
+                platforms.set(i, new BasicPlatform(highestPlatform, world));
+            }
             platform.update();
         }
+
         player.update();
 
         if (game.cam.position.y < moveCamUpToHere) {
