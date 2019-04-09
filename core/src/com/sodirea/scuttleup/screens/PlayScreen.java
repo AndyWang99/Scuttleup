@@ -73,6 +73,10 @@ public class PlayScreen extends ScreenAdapter {
                     if (platform != null && player.getPosition().y > platform.getPosition().y) {
                         moveCamUpToHere = platform.getPosition().y + SCREEN_HEIGHT / 3;
                     }
+
+                    if (platform != null && platform instanceof PistonPlatform) {
+                        player.applyBodyLinearImpulse(0, 200);
+                    }
                 }
             }
 
