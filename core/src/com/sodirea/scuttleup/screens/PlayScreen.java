@@ -64,7 +64,7 @@ public class PlayScreen extends ScreenAdapter {
                         platform = (Platform) contact.getFixtureB().getBody().getUserData();
                     }
 
-                    if (platform != null && player.getPosition().y > platform.getPosition().y + platform.getTexture().getHeight()) {
+                    if (platform != null && player.getPosition().y > platform.getPosition().y) {
                         moveCamUpToHere = platform.getPosition().y + SCREEN_HEIGHT / 3;
                     }
                 }
@@ -127,28 +127,24 @@ public class PlayScreen extends ScreenAdapter {
                 player.setBodyLinearVelocity(0, 0);
 
                 if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-                    player.setBodyLinearVelocity(player.getBodyLinearVelocity().x, 70);
+                    player.setBodyLinearVelocity(player.getBodyLinearVelocity().x, 30);
                     player.setDashingStatus();
-                    player.lessNumDashesLeft();
                 }
 
                 if (Gdx.input.isKeyPressed(Input.Keys.A)) {
                     player.setBodyLinearVelocity(-40, player.getBodyLinearVelocity().y);
                     player.setDashingStatus();
-                    player.lessNumDashesLeft();
 
                 }
 
                 if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                    player.setBodyLinearVelocity(player.getBodyLinearVelocity().x, -70);
+                    player.setBodyLinearVelocity(player.getBodyLinearVelocity().x, -30);
                     player.setDashingStatus();
-                    player.lessNumDashesLeft();
                 }
 
                 if (Gdx.input.isKeyPressed(Input.Keys.D)) {
                     player.setBodyLinearVelocity(40, player.getBodyLinearVelocity().y);
                     player.setDashingStatus();
-                    player.lessNumDashesLeft();
                 }
             }
         }

@@ -147,6 +147,7 @@ public class Player {
 
     public void setDashingStatus() {
         isDashing = true;
+        lessNumDashesLeft();
     }
 
     public Vector2 getBodyLinearVelocity() {
