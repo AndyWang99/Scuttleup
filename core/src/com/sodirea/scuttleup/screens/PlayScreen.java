@@ -174,7 +174,7 @@ public class PlayScreen extends ScreenAdapter {
         game.sb.setProjectionMatrix(game.cam.projection);
 
         game.sb.begin();
-        game.sb.draw(bg, 0, 0);
+        game.sb.draw(bg, game.cam.position.x - game.cam.viewportWidth / 2, game.cam.position.y - game.cam.viewportHeight / 2);
         checkpoint.render(game.sb);
         for (Platform platform : platforms) {
             platform.render(game.sb);
