@@ -22,6 +22,9 @@ public class Player {
 
     private boolean isDashing;
     private float dashCounter;
+    private int numDashesLeft;
+    private int maxNumDashes;
+
 
     private BodyDef playerBodyDef;
     private Body playerBody;
@@ -40,7 +43,10 @@ public class Player {
         sprite = new Texture("player.png");
         position = new Vector2(x, y);
 
+        isDashing = false;
         dashCounter = 0;
+        numDashesLeft = 1;
+        maxNumDashes = 1;
 
         playerBodyDef = new BodyDef();
         playerBodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -69,6 +75,9 @@ public class Player {
     }
 
     public void update(float dt) {
+        if (numberOfFootContacts > 0) {
+            resetNumDashesLeft();
+        }
         if (isDashing) {
             // since dashing, don't let gravity affect
             playerBody.setGravityScale(0f);
@@ -146,5 +155,17 @@ public class Player {
 
     public void setBodyLinearVelocity(float x, float y) {
         playerBody.setLinearVelocity(x, y);
+    }
+
+    public int getNumDashesLeft() {
+        return numDashesLeft;
+    }
+
+    public void lessNumDashesLeft() {
+        numDashesLeft--;
+    }
+
+    public void resetNumDashesLeft() {
+        numDashesLeft = maxNumDashes;
     }
 }

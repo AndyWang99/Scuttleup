@@ -123,32 +123,33 @@ public class PlayScreen extends ScreenAdapter {
             player.applyBodyLinearImpulse(5, 0);
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.J)) {
-            player.setBodyLinearVelocity(0, 0);
-            
-            if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-                player.setBodyLinearVelocity(player.getBodyLinearVelocity().x, 70);
-                player.setDashingStatus();
+            if (player.getNumDashesLeft() > 0) {
+                player.setBodyLinearVelocity(0, 0);
 
+                if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+                    player.setBodyLinearVelocity(player.getBodyLinearVelocity().x, 70);
+                    player.setDashingStatus();
+                    player.lessNumDashesLeft();
+                }
 
-            }
+                if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+                    player.setBodyLinearVelocity(-40, player.getBodyLinearVelocity().y);
+                    player.setDashingStatus();
+                    player.lessNumDashesLeft();
 
-            if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                player.setBodyLinearVelocity(-40, player.getBodyLinearVelocity().y);
-                player.setDashingStatus();
+                }
 
-            }
+                if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+                    player.setBodyLinearVelocity(player.getBodyLinearVelocity().x, -70);
+                    player.setDashingStatus();
+                    player.lessNumDashesLeft();
+                }
 
-            if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                player.setBodyLinearVelocity(player.getBodyLinearVelocity().x, -70);
-                player.setDashingStatus();
-
-
-            }
-
-            if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                player.setBodyLinearVelocity(40, player.getBodyLinearVelocity().y);
-                player.setDashingStatus();
-
+                if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+                    player.setBodyLinearVelocity(40, player.getBodyLinearVelocity().y);
+                    player.setDashingStatus();
+                    player.lessNumDashesLeft();
+                }
             }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.K)) {
