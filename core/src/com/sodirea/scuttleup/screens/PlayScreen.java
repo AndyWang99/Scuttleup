@@ -56,6 +56,7 @@ public class PlayScreen extends ScreenAdapter {
             @Override
             public void beginContact(Contact contact) {
                 if (contact.getFixtureA().getBody().getUserData() instanceof Player || contact.getFixtureB().getBody().getUserData() instanceof Player) {
+                    player.addNumberOfFootContacts(); // add to the total number of contact points
                     Platform platform = null;
                     if (contact.getFixtureA().getBody().getUserData() instanceof Platform) {
                         platform = (Platform) contact.getFixtureA().getBody().getUserData();
@@ -65,14 +66,15 @@ public class PlayScreen extends ScreenAdapter {
 
                     if (platform != null && player.getPosition().y > platform.getPosition().y + platform.getTexture().getHeight()) {
                         moveCamUpToHere = platform.getPosition().y + SCREEN_HEIGHT / 3;
-                        System.out.println(moveCamUpToHere);
                     }
                 }
             }
 
             @Override
             public void endContact(Contact contact) {
-
+                if (contact.getFixtureA().getBody().getUserData() instanceof Player || contact.getFixtureB().getBody().getUserData() instanceof Player) {
+                    player.lessNumberOfFootContacts();
+                }
             }
 
             @Override
@@ -105,7 +107,9 @@ public class PlayScreen extends ScreenAdapter {
             @Override
             public boolean keyDown(int keyCode) {
                 if (keyCode == Input.Keys.W || keyCode == Input.Keys.SPACE) {
-                    player.setBodyLinearVelocity(player.getBodyLinearVelocity().x, 40);
+                    if (player.getNumberOfFootContacts() > 0) {
+                        player.setBodyLinearVelocity(player.getBodyLinearVelocity().x, 50);
+                    }
                 } else if (keyCode == Input.Keys.A) {
                     player.setBodyLinearVelocity(-20, player.getBodyLinearVelocity().y);
                 } else if (keyCode == Input.Keys.S) {

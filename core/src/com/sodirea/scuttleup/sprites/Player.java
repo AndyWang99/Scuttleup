@@ -29,6 +29,7 @@ public class Player {
     private PolygonShape footBox;
     private FixtureDef footFixtureDef;
     private Fixture footFixture;
+    private int numberOfFootContacts;
 
     public Player(float x, float y, World world) {
         sprite = new Texture("player.png");
@@ -59,6 +60,7 @@ public class Player {
         footFixture = footBody.createFixture(footFixtureDef);
         footBody.setFixedRotation(true);
         footBody.setUserData(this);
+        numberOfFootContacts = 0;
     }
 
     public void update() {
@@ -85,5 +87,17 @@ public class Player {
 
     public Vector2 getPosition() {
         return position;
+    }
+
+    public void addNumberOfFootContacts() {
+        numberOfFootContacts++;
+    }
+
+    public void lessNumberOfFootContacts() {
+        numberOfFootContacts--;
+    }
+
+    public int getNumberOfFootContacts() {
+        return numberOfFootContacts;
     }
 }
