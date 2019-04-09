@@ -21,6 +21,8 @@ import com.sodirea.scuttleup.sprites.Player;
 
 import java.util.ArrayList;
 
+import static com.sodirea.scuttleup.Scuttleup.SCREEN_HEIGHT;
+
 public class PlayScreen extends ScreenAdapter {
 
     public static final float PIXELS_TO_METERS = 0.01f; // default is 0.01f
@@ -30,7 +32,7 @@ public class PlayScreen extends ScreenAdapter {
 
     public static final int CHECKPOINT_INTERVALS = 2000; // each checkpoint should give a new upgrade for character
     public static final int PLATFORM_INTERVALS = 200;
-    public static final int NUM_PLATFORMS_IN_ARRAY = (int) Math.ceil(Scuttleup.SCREEN_HEIGHT / PLATFORM_INTERVALS) + 1;
+    public static final int NUM_PLATFORMS_IN_ARRAY = (int) Math.ceil(SCREEN_HEIGHT / PLATFORM_INTERVALS) + 1;
 
     Scuttleup game;
 
@@ -62,7 +64,8 @@ public class PlayScreen extends ScreenAdapter {
                     }
 
                     if (platform != null && player.getPosition().y > platform.getPosition().y + platform.getTexture().getHeight()) {
-                        moveCamUpToHere += PLATFORM_INTERVALS;
+                        moveCamUpToHere = platform.getPosition().y + SCREEN_HEIGHT / 3;
+                        System.out.println(moveCamUpToHere);
                     }
                 }
             }
@@ -102,7 +105,7 @@ public class PlayScreen extends ScreenAdapter {
             @Override
             public boolean keyDown(int keyCode) {
                 if (keyCode == Input.Keys.W || keyCode == Input.Keys.SPACE) {
-                    player.setBodyLinearVelocity(player.getBodyLinearVelocity().x, 50);
+                    player.setBodyLinearVelocity(player.getBodyLinearVelocity().x, 40);
                 } else if (keyCode == Input.Keys.A) {
                     player.setBodyLinearVelocity(-20, player.getBodyLinearVelocity().y);
                 } else if (keyCode == Input.Keys.S) {
@@ -156,9 +159,8 @@ public class PlayScreen extends ScreenAdapter {
 
         player.update();
 
-        if (game.cam.position.y < moveCamUpToHere) {
-            game.cam.position.y += (moveCamUpToHere-game.cam.position.y) / 10;
-        }
+        game.cam.position.y += (moveCamUpToHere-game.cam.position.y) / 10;
+
         game.cam.update();
 
         world.step(TIME_STEP, 6, 2);
