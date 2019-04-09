@@ -106,60 +106,8 @@ public class PlayScreen extends ScreenAdapter {
 
     }
 
-    public void handleInput() {
-        if (Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed
-                (Input.Keys.SPACE)) {
-            if (player.getNumberOfFootContacts() > 0) {
-                player.applyBodyLinearImpulse(0, 25);
-            }
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            player.applyBodyLinearImpulse(-5, 0);
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            player.applyBodyLinearImpulse(5, 0);
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.J)) {
-            if (player.getNumDashesLeft() > 0) {
-                player.setBodyLinearVelocity(0, 0);
-
-                if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-                    player.setBodyLinearVelocity(player.getBodyLinearVelocity().x, 30);
-                    player.setDashingStatus();
-                }
-
-                if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-                    player.setBodyLinearVelocity(-40, player.getBodyLinearVelocity().y);
-                    player.setDashingStatus();
-
-                }
-
-                if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-                    player.setBodyLinearVelocity(player.getBodyLinearVelocity().x, -30);
-                    player.setDashingStatus();
-                }
-
-                if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-                    player.setBodyLinearVelocity(40, player.getBodyLinearVelocity().y);
-                    player.setDashingStatus();
-                }
-            }
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.K)) {
-
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.L)) {
-
-        }
-    }
-
     @Override
     public void render(float delta) {
-        handleInput();
-
         // LOGIC UPDATES
         checkpoint.update(game.cam.position.y - game.cam.viewportHeight / 2);
         for (int i = 0; i < NUM_PLATFORMS_IN_ARRAY; i++) {

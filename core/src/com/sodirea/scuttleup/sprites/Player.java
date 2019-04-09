@@ -1,5 +1,7 @@
 package com.sodirea.scuttleup.sprites;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -74,7 +76,59 @@ public class Player {
         numberOfFootContacts = 0;
     }
 
+    public void handleInput() {
+        if (Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed
+                (Input.Keys.SPACE)) {
+            if (getNumberOfFootContacts() > 0) {
+                applyBodyLinearImpulse(0, 25);
+            }
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            applyBodyLinearImpulse(-5, 0);
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+            applyBodyLinearImpulse(5, 0);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.J)) {
+            if (getNumDashesLeft() > 0) {
+                setBodyLinearVelocity(0, 0);
+
+                if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+                    setBodyLinearVelocity(getBodyLinearVelocity().x, 30);
+                    setDashingStatus();
+                }
+
+                if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+                    setBodyLinearVelocity(-40, getBodyLinearVelocity().y);
+                    setDashingStatus();
+
+                }
+
+                if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+                    setBodyLinearVelocity(getBodyLinearVelocity().x, -30);
+                    setDashingStatus();
+                }
+
+                if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+                    setBodyLinearVelocity(40, getBodyLinearVelocity().y);
+                    setDashingStatus();
+                }
+            }
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.K)) {
+
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.L)) {
+
+        }
+    }
+
     public void update(float dt) {
+        handleInput();
+
         if (numberOfFootContacts > 0) {
             resetNumDashesLeft();
         }
@@ -89,8 +143,8 @@ public class Player {
                 playerBody.setLinearVelocity(40, playerBody.getLinearVelocity().y);
             }
 
-            if (playerBody.getLinearVelocity().y > 70) {
-                playerBody.setLinearVelocity(playerBody.getLinearVelocity().x, 70);
+            if (playerBody.getLinearVelocity().y > 30) {
+                playerBody.setLinearVelocity(playerBody.getLinearVelocity().x, 30);
             }
             dashCounter += dt;
             if (dashCounter > DASH_DURATION) {
