@@ -112,17 +112,37 @@ public class PlayScreen extends ScreenAdapter {
             if (player.getNumberOfFootContacts() > 0) {
                 player.applyBodyLinearImpulse(0, 25);
             }
-        } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             player.applyBodyLinearImpulse(-5, 0);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
 
-        } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             player.applyBodyLinearImpulse(5, 0);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.J)) {
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.J)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+                player.applyBodyLinearImpulse(0, 100);
+            }
 
-        } else if (Gdx.input.isKeyPressed(Input.Keys.K)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+                player.applyBodyLinearImpulse(-40, 0);
+            }
 
-        } else if (Gdx.input.isKeyPressed(Input.Keys.L)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+                player.applyBodyLinearImpulse(0, -100);
+            }
+
+            if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+                player.applyBodyLinearImpulse(40, 0);
+            }
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.K)) {
+
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.L)) {
 
         }
     }
